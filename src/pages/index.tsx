@@ -1,11 +1,8 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
-import { AuthContainer } from '@/modules/auth/application/auth.container';
-import { LoginFormContainer } from '@/modules/auth/application/login-form/login-form.container';
+import { TodoListContainer } from '@/modules/todos/application/todo-list/todo-list.container';
 
-const Home: NextPage<{ user: { authenticated: boolean } }> = function home ({ user }) {
-  user = {authenticated: false};
+const Home: NextPage = function home () {
   return (
     <>
       <Head>
@@ -22,17 +19,7 @@ const Home: NextPage<{ user: { authenticated: boolean } }> = function home ({ us
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {user.authenticated ? (
-        <>
-        <p>User is authenticated</p>
-        </>
-      ) : (
-        <>
-        <AuthContainer>
-          <LoginFormContainer />
-        </AuthContainer>
-        </>
-      )}
+      <TodoListContainer />
     </>
   );
 };
