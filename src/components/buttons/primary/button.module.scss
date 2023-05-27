@@ -1,0 +1,20 @@
+.button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+  width: 140px;
+  height: 48px;
+  background: #BD9479;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #F8F7F4;
+  font-size: 18px;
+  transition: all 0.3s ease-in;
+}
+
+.button:hover {
+  opacity: 0.8;
+}
