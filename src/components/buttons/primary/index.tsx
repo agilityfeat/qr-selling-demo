@@ -6,10 +6,12 @@ interface Props {
 	onClick?: () => void
 }
 
-export const PrimaryButton = function Button({ children, ...props }: Props) {
+const PrimaryButton = function Button({ children, ...props }: Props) {
 	return (
 		<button type="button" className={styles.button} {...props}>
 			{children}
 		</button>
 	)
 }
+
+export default PrimaryButton
