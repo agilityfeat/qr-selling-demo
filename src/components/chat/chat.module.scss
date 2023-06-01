@@ -1,0 +1,41 @@
+.container {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.controls {
+  width: 100%;
+  display: flex;
+}
+
+.container p {
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #5B4F47;
+  color: #F8F7F4;
+  white-space: pre;
+}
+
+.controls input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin: 5px;
+  box-sizing: border-box;
+}
+
+.controls button {
+  width: 20%;
+  padding: 10px;
+  margin: 5px;
+  background-color: #BD9479;
+  color: #F8F7F4;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
