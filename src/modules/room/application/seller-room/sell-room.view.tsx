@@ -8,6 +8,7 @@ import Videos from '@/components/videos'
 import Chat from '@/components/chat'
 import ImageForm from '@/components/forms/image'
 import IconButton from '@/components/buttons/iconButton/iconButton'
+import QRCodeForm from '@/components/forms/qr'
 import styles from './sell-room.module.scss'
 
 const SellRoomView = function SellRoomView() {
@@ -65,8 +66,9 @@ const SellRoomView = function SellRoomView() {
 			<Modal
 				isOpen={qrModalIsOpen}
 				onRequestClose={() => toggleModal('qr')}
+				className={styles.modal}
 			>
-				Add QR
+				<QRCodeForm />
 			</Modal>
 		</>
 	)

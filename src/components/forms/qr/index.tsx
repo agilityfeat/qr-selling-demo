@@ -2,35 +2,31 @@ import React, { useState, ChangeEvent, FormEvent } from 'react'
 import styles from '../forms.module.scss'
 
 interface FormData {
-	image: File | null
+	text: string
 	xAxis: number
 	yAxis: number
 	width: number
 	height: number
+	darkColor: string
+	lightColor: string
 }
 
-const ImageForm = function ImageForm(): JSX.Element {
+const QRCodeForm = function QRCodeForm(): JSX.Element {
 	const [formData, setFormData] = useState<FormData>({
-		image: null,
+		text: '',
 		xAxis: 0,
 		yAxis: 0,
-		width: 0,
-		height: 0,
+		width: 128,
+		height: 128,
+		darkColor: '#000000',
+		lightColor: '#FFFFFF',
 	})
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target
 		setFormData((prevData) => ({
 			...prevData,
-			[name]: parseInt(value, 10),
-		}))
-	}
-
-	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files && e.target.files[0]
-		setFormData((prevData) => ({
-			...prevData,
-			image: file || null,
+			[name]: value,
 		}))
 	}
 
@@ -38,29 +34,22 @@ const ImageForm = function ImageForm(): JSX.Element {
 		e.preventDefault()
 		// Perform form submission logic here
 		console.log(formData)
-		// Reset form
-		setFormData({
-			image: null,
-			xAxis: 0,
-			yAxis: 0,
-			width: 0,
-			height: 0,
-		})
 	}
 
 	return (
 		<div className={styles.container}>
-			<h1 className={styles.title}>Add Image</h1>
+			<h1 className={styles.title}>QR Code Form</h1>
 			<form className={styles.form} onSubmit={handleSubmit}>
 				<div className={styles.formGroup}>
-					<label htmlFor="image">
-						Image:
+					<label htmlFor="text">
+						Text:
 						<input
 							className={styles.input}
-							type="file"
-							name="image"
-							accept="image/*"
-							onChange={handleImageChange}
+							type="text"
+							id="text"
+							name="text"
+							value={formData.text}
+							onChange={handleInputChange}
 							required
 						/>
 					</label>
@@ -71,6 +60,7 @@ const ImageForm = function ImageForm(): JSX.Element {
 						<input
 							className={styles.input}
 							type="number"
+							id="xAxis"
 							name="xAxis"
 							value={formData.xAxis}
 							onChange={handleInputChange}
@@ -84,6 +74,7 @@ const ImageForm = function ImageForm(): JSX.Element {
 						<input
 							className={styles.input}
 							type="number"
+							id="yAxis"
 							name="yAxis"
 							value={formData.yAxis}
 							onChange={handleInputChange}
@@ -97,6 +88,7 @@ const ImageForm = function ImageForm(): JSX.Element {
 						<input
 							className={styles.input}
 							type="number"
+							id="width"
 							name="width"
 							value={formData.width}
 							onChange={handleInputChange}
@@ -110,6 +102,7 @@ const ImageForm = function ImageForm(): JSX.Element {
 						<input
 							className={styles.input}
 							type="number"
+							id="height"
 							name="height"
 							value={formData.height}
 							onChange={handleInputChange}
@@ -117,12 +110,42 @@ const ImageForm = function ImageForm(): JSX.Element {
 						/>
 					</label>
 				</div>
-				<button type="submit" className={styles.submitButton}>
-					Submit
-				</button>
+				<div className={styles.formGroup}>
+					<label htmlFor="darkColor">
+						Dark Color:
+						<input
+							className={styles.input}
+							type="color"
+							id="darkColor"
+							name="darkColor"
+							value={formData.darkColor}
+							onChange={handleInputChange}
+							required
+						/>
+					</label>
+				</div>
+				<div className={styles.formGroup}>
+					<label htmlFor="lightColor">
+						Light Color:
+						<input
+							className={styles.input}
+							type="color"
+							id="lightColor"
+							name="lightColor"
+							value={formData.lightColor}
+							onChange={handleInputChange}
+							required
+						/>
+					</label>
+				</div>
+				<div className={styles.formGroup}>
+					<button className={styles.submitButton} type="submit">
+						Generate QR Code
+					</button>
+				</div>
 			</form>
 		</div>
 	)
 }
 
-export default ImageForm
+export default QRCodeForm
