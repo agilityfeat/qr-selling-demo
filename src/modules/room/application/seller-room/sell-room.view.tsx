@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 import Modal from 'react-modal'
+import { FaImage, FaQrcode, FaBroom } from 'react-icons/fa'
 import Header from '@/components/header'
 import Main from '@/components/main'
 import Videos from '@/components/videos'
 import Chat from '@/components/chat'
-import PrimaryButton from '@/components/buttons/primary'
+import ImageForm from '@/components/forms/image'
+import IconButton from '@/components/buttons/iconButton/iconButton'
 import styles from './sell-room.module.scss'
 
 const SellRoomView = function SellRoomView() {
@@ -38,22 +40,27 @@ const SellRoomView = function SellRoomView() {
 						/>
 					</Videos>
 				</div>
-				<div className={styles.chat}>
-					<PrimaryButton onClick={() => toggleModal('image')}>
-						Add Image
-					</PrimaryButton>
-					<PrimaryButton onClick={() => toggleModal('qr')}>
-						Add QR
-					</PrimaryButton>
-					<PrimaryButton>Clear</PrimaryButton>
+				<div className={styles.controls}>
+					<div className={styles.buttons}>
+						<IconButton
+							onClick={() => toggleModal('image')}
+							icon={<FaImage />}
+						/>
+						<IconButton
+							onClick={() => toggleModal('qr')}
+							icon={<FaQrcode />}
+						/>
+						<IconButton icon={<FaBroom />} />
+					</div>
 					<Chat messages={['Message 1', 'Message 2', 'Message 3']} />
 				</div>
 			</Main>
 			<Modal
 				isOpen={imgModalIsOpen}
 				onRequestClose={() => toggleModal('image')}
+				className={styles.modal}
 			>
-				Add Images
+				<ImageForm />
 			</Modal>
 			<Modal
 				isOpen={qrModalIsOpen}

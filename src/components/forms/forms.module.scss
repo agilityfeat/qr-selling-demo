@@ -1,0 +1,27 @@
+.container {
+  max-width: 400px;
+  margin: auto;
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.input {
+  padding: 0.5rem;
+  border: 1px solid #BD9479;
+}
+
+.submitButton {
+  padding: 0.5rem 1rem;
+  background-color: #BD9479;
+  color: #F8F7F4;
+  border: none;
+  cursor: pointer;
+}
