@@ -11,7 +11,11 @@ import IconButton from '@/components/buttons/iconButton/iconButton'
 import QRCodeForm from '@/components/forms/qr'
 import styles from './sell-room.module.scss'
 
-const SellRoomView = function SellRoomView() {
+interface Props {
+	canvasRef: React.RefObject<HTMLCanvasElement>
+}
+
+const SellRoomView = function SellRoomView({ canvasRef }: Props) {
 	const [imgModalIsOpen, setImgModalIsOpen] = useState(false)
 	const [qrModalIsOpen, setQrModalIsOpen] = useState(false)
 
@@ -34,10 +38,10 @@ const SellRoomView = function SellRoomView() {
 			<Main>
 				<div className={styles.videos}>
 					<Videos>
-						<video
-							id="localVideo"
-							poster="/icons/logo.svg"
-							autoPlay
+						<canvas
+							key="STREAM_PREVIEW_VIDEO"
+							id="cam-video-preview"
+							ref={canvasRef}
 						/>
 					</Videos>
 				</div>

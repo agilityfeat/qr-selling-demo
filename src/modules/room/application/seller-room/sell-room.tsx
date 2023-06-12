@@ -1,8 +1,103 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import IVSBroadcastClient, {
+	STANDARD_LANDSCAPE,
+	LOG_LEVEL,
+} from 'amazon-ivs-web-broadcast'
+import useLayers, { Layer } from '@/components/stream/useLayers'
+import useMixer, { AudioDevice } from '@/components/stream/useMixer'
 import SellRoomView from './sell-room.view'
 
+const CAM_LAYER_NAME = 'camera'
+const MIC_LAYER_NAME = 'mic'
+
 const SellRoom = function SellRoom() {
-	return <SellRoomView />
+	const client = useRef<any>()
+	const canvasRef = useRef<HTMLCanvasElement>(null)
+	const activeVideoDevice = useRef<MediaDeviceInfo>()
+	const activeAudioDevice = useRef<MediaDeviceInfo>()
+
+	const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([])
+	const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([])
+	const [camMuted, setCamMuted] = useState(false)
+	const [micMuted, setMicMuted] = useState(false)
+
+	const { addLayer } = useLayers([])
+	const { addMixerDevice } = useMixer([])
+
+	const getMediaDevices = async () => {
+		const devices = await navigator.mediaDevices.enumerateDevices()
+		const vDevices = devices.filter((d) => d.kind === 'videoinput')
+		const aDevices = devices.filter((d) => d.kind === 'audioinput')
+		return [vDevices, aDevices]
+	}
+
+	const renderActiveVideoDevice = () => {
+		const canvas = client.current.getCanvasDimensions()
+		const deviceToAdd = activeVideoDevice.current
+
+		const layer: Layer = {
+			device: deviceToAdd as MediaDeviceInfo,
+			name: CAM_LAYER_NAME,
+			index: 4,
+			enabled: !camMuted,
+			x: 0,
+			y: 0,
+			width: canvas.width,
+			height: canvas.height,
+			type: 'VIDEO',
+		}
+
+		addLayer(layer, client.current)
+	}
+
+	const renderActiveAudioDevice = () => {
+		const mixerDevice: AudioDevice = {
+			name: MIC_LAYER_NAME,
+			device: activeAudioDevice.current as MediaDeviceInfo,
+			enabled: micMuted || false,
+		}
+
+		addMixerDevice(mixerDevice, client.current)
+	}
+
+	const initLayers = async () => {
+		// log errors in the browser console
+		client.current.config.logLevel = LOG_LEVEL.ERROR
+		// attach the preview canvas to Amazon IVS client
+		client.current.attachPreview(canvasRef)
+
+		// list media devices
+		try {
+			const [vDevices, aDevices] = await getMediaDevices()
+			setVideoDevices(vDevices)
+			setAudioDevices(aDevices)
+		} catch (err) {
+			console.error(err)
+		}
+
+		try {
+			if (!activeVideoDevice.current) {
+				;[activeVideoDevice.current] = videoDevices
+			}
+			renderActiveVideoDevice()
+
+			if (!activeAudioDevice.current) {
+				;[activeAudioDevice.current] = audioDevices
+			}
+			renderActiveAudioDevice()
+		} catch (err) {
+			console.error(err)
+		}
+	}
+
+	useEffect(() => {
+		const IVSClient = IVSBroadcastClient.create({
+			streamConfig: STANDARD_LANDSCAPE,
+		})
+		client.current = IVSClient
+		initLayers()
+	}, [])
+	return <SellRoomView canvasRef={canvasRef} />
 }
 
 export default SellRoom
