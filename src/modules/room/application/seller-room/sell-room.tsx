@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import useLayers, { Layer } from '@/components/stream/useLayers'
 import useMixer, { AudioDevice } from '@/components/stream/useMixer'
+import useStream from '@/components/stream/useStream'
 import SellRoomView from './sell-room.view'
 
 const CAM_LAYER_NAME = 'camera'
@@ -17,8 +18,9 @@ const SellRoom = function SellRoom() {
 	const [camMuted, setCamMuted] = useState(false)
 	const [micMuted, setMicMuted] = useState(false)
 
-	const { addLayer } = useLayers([])
-	const { addMixerDevice } = useMixer([])
+	const { addLayer, removeLayer } = useLayers([])
+	const { addMixerDevice, toggleMixerDeviceMute } = useMixer([])
+	const { isLive, toggleStream } = useStream()
 
 	const getMediaDevices = async () => {
 		const devices = await navigator.mediaDevices.enumerateDevices()
@@ -54,6 +56,45 @@ const SellRoom = function SellRoom() {
 		}
 
 		addMixerDevice(mixerDevice, client.current)
+	}
+
+	const handleMicMute = async () => {
+		const mixerDevice: AudioDevice = {
+			name: MIC_LAYER_NAME,
+			device: activeAudioDevice.current as MediaDeviceInfo,
+			enabled: micMuted,
+		}
+
+		const enabled = toggleMixerDeviceMute(mixerDevice, client.current)
+		setMicMuted(enabled)
+	}
+
+	const handleCameraMute = async () => {
+		const canvas = client.current.getCanvasDimensions()
+
+		const layer: Layer = {
+			device: activeVideoDevice.current as MediaDeviceInfo,
+			name: CAM_LAYER_NAME,
+			index: 4,
+			enabled: camMuted,
+			x: 0,
+			y: 0,
+			width: canvas.width,
+			height: canvas.height,
+			type: 'VIDEO',
+		}
+
+		if (camMuted) {
+			await addLayer(layer, client.current)
+			setCamMuted(false)
+		} else {
+			await removeLayer(layer, client.current)
+			setCamMuted(true)
+		}
+	}
+
+	const handleStream = async () => {
+		toggleStream('', '', client.current, (err) => console.error(err))
 	}
 
 	const initLayers = async () => {
@@ -104,7 +145,17 @@ const SellRoom = function SellRoom() {
 		initialize()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-	return <SellRoomView canvasRef={canvasRef} />
+	return (
+		<SellRoomView
+			canvasRef={canvasRef}
+			isLive={isLive}
+			micMuted={micMuted}
+			camMuted={camMuted}
+			handleMicMute={handleMicMute}
+			handleCameraMute={handleCameraMute}
+			handleStream={handleStream}
+		/>
+	)
 }
 
 export default SellRoom

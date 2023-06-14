@@ -53,9 +53,25 @@ const useMixer = (initialDevices: AudioDevice[]) => {
 		}
 	}
 
+	const toggleMixerDeviceMute = (mixerDevice: AudioDevice, client: any) => {
+		const { name, enabled } = mixerDevice
+		const [microphoneTrack] = client
+			.getAudioInputDevice(name)
+			.getAudioTracks()
+
+		if (enabled) {
+			microphoneTrack.enabled = true
+		} else {
+			microphoneTrack.enabled = false
+		}
+
+		return !microphoneTrack.enabled
+	}
+
 	return {
 		addMixerDevice,
 		removeMixerDevice,
+		toggleMixerDeviceMute,
 	}
 }
 

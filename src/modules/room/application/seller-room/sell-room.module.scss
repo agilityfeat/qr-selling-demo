@@ -6,6 +6,41 @@
 	width: 20%;
 }
 
+.controlBar {
+  width: 100%;
+  min-height: 8rem;
+  height: auto;
+  padding: 0 2rem;
+  display: flex;
+  place-items: var(--justify-center-responsive);
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 1.2rem;
+}
+
+.controlBarLeft,
+.controlBarRight {
+  display: flex;
+  flex-shrink: 0;
+  place-items: center;
+  width: 10%;
+  min-width: 4.2rem;
+}
+
+.controlBarLeft {
+  display: var(--hide-on-mobile);
+  justify-content: flex-start;
+}
+
+.controlBarRight {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.controlBarCenter {
+  flex-grow: 1;
+}
+
 .buttons {
   width: 100%;
   display: flex;
