@@ -1,8 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import IVSBroadcastClient, {
-	STANDARD_LANDSCAPE,
-	LOG_LEVEL,
-} from 'amazon-ivs-web-broadcast'
 import useLayers, { Layer } from '@/components/stream/useLayers'
 import useMixer, { AudioDevice } from '@/components/stream/useMixer'
 import SellRoomView from './sell-room.view'
@@ -61,14 +57,18 @@ const SellRoom = function SellRoom() {
 	}
 
 	const initLayers = async () => {
+		const IVSBroadcastClient = (await import('amazon-ivs-web-broadcast'))
+			.default
 		// log errors in the browser console
-		client.current.config.logLevel = LOG_LEVEL.ERROR
+		client.current.config.logLevel = IVSBroadcastClient.LOG_LEVEL.ERROR
 		// attach the preview canvas to Amazon IVS client
-		client.current.attachPreview(canvasRef)
+		client.current.attachPreview(canvasRef.current)
 
 		// list media devices
+		let vDevices: MediaDeviceInfo[] = []
+		let aDevices: MediaDeviceInfo[] = []
 		try {
-			const [vDevices, aDevices] = await getMediaDevices()
+			;[vDevices, aDevices] = await getMediaDevices()
 			setVideoDevices(vDevices)
 			setAudioDevices(aDevices)
 		} catch (err) {
@@ -77,12 +77,12 @@ const SellRoom = function SellRoom() {
 
 		try {
 			if (!activeVideoDevice.current) {
-				;[activeVideoDevice.current] = videoDevices
+				;[activeVideoDevice.current] = vDevices
 			}
 			renderActiveVideoDevice()
 
 			if (!activeAudioDevice.current) {
-				;[activeAudioDevice.current] = audioDevices
+				;[activeAudioDevice.current] = aDevices
 			}
 			renderActiveAudioDevice()
 		} catch (err) {
@@ -90,12 +90,19 @@ const SellRoom = function SellRoom() {
 		}
 	}
 
-	useEffect(() => {
+	const initialize = async () => {
+		const IVSBroadcastClient = (await import('amazon-ivs-web-broadcast'))
+			.default
 		const IVSClient = IVSBroadcastClient.create({
-			streamConfig: STANDARD_LANDSCAPE,
+			streamConfig: IVSBroadcastClient.STANDARD_LANDSCAPE,
 		})
 		client.current = IVSClient
 		initLayers()
+	}
+
+	useEffect(() => {
+		initialize()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 	return <SellRoomView canvasRef={canvasRef} />
 }
