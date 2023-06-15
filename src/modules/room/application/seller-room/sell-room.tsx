@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import useLayers, { Layer } from '@/components/stream/useLayers'
 import useMixer, { AudioDevice } from '@/components/stream/useMixer'
 import useStream from '@/components/stream/useStream'
+import { ivsConfig } from '@/config/ivs'
 import SellRoomView from './sell-room.view'
 
 const CAM_LAYER_NAME = 'camera'
@@ -94,7 +95,12 @@ const SellRoom = function SellRoom() {
 	}
 
 	const handleStream = async () => {
-		toggleStream('', '', client.current, (err) => console.error(err))
+		toggleStream(
+			ivsConfig.ingestServer,
+			ivsConfig.streamKey,
+			client.current,
+			(err) => console.error(err)
+		)
 	}
 
 	const initLayers = async () => {
