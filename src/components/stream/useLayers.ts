@@ -26,9 +26,9 @@ const useLayers = (initialLayers: Layer[]) => {
 				case 'VIDEO':
 					stream = client.getVideoInputDevice(name)
 					if (stream) {
-						stream.source.getVideoTracks.map(
-							(track: MediaStreamTrack) => track.stop
-						)
+						stream.source
+							.getVideoTracks()
+							.map((track: MediaStreamTrack) => track.stop)
 					}
 					await client.removeVideoInputDevice(name)
 					break

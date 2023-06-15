@@ -19,6 +19,7 @@ import ImageForm from '@/components/forms/image'
 import IconButton from '@/components/buttons/iconButton/iconButton'
 import QRCodeForm from '@/components/forms/qr'
 import PrimaryButton from '@/components/buttons/primary'
+import ControlButton from '@/components/buttons/controlButton/controlButton'
 import styles from './sell-room.module.scss'
 
 interface Props {
@@ -60,6 +61,8 @@ const SellRoomView = function SellRoomView({
 		}
 	}
 
+	Modal.setAppElement('#modals')
+
 	return (
 		<>
 			<Header />
@@ -75,7 +78,7 @@ const SellRoomView = function SellRoomView({
 					<div className={styles.controlBar}>
 						<div className={styles.controlBarLeft} />
 						<div className={styles.controlBarCenter}>
-							<IconButton
+							<ControlButton
 								onClick={handleMicMute}
 								icon={
 									micMuted ? (
@@ -85,11 +88,11 @@ const SellRoomView = function SellRoomView({
 									)
 								}
 							/>
-							<IconButton
+							<ControlButton
 								onClick={handleCameraMute}
 								icon={camMuted ? <FaVideoSlash /> : <FaVideo />}
 							/>
-							<IconButton
+							<ControlButton
 								onClick={() => toggleModal('settings')}
 								icon={<FaEllipsisH />}
 							/>
@@ -115,27 +118,29 @@ const SellRoomView = function SellRoomView({
 					<Chat messages={['Message 1', 'Message 2', 'Message 3']} />
 				</div>
 			</Main>
-			<Modal
-				isOpen={imgModalIsOpen}
-				onRequestClose={() => toggleModal('image')}
-				className={styles.modal}
-			>
-				<ImageForm />
-			</Modal>
-			<Modal
-				isOpen={qrModalIsOpen}
-				onRequestClose={() => toggleModal('qr')}
-				className={styles.modal}
-			>
-				<QRCodeForm />
-			</Modal>
-			<Modal
-				isOpen={settingsModalIsOpen}
-				onRequestClose={() => toggleModal('settings')}
-				className={styles.modal}
-			>
-				Settings
-			</Modal>
+			<div id="modals">
+				<Modal
+					isOpen={imgModalIsOpen}
+					onRequestClose={() => toggleModal('image')}
+					className={styles.modal}
+				>
+					<ImageForm />
+				</Modal>
+				<Modal
+					isOpen={qrModalIsOpen}
+					onRequestClose={() => toggleModal('qr')}
+					className={styles.modal}
+				>
+					<QRCodeForm />
+				</Modal>
+				<Modal
+					isOpen={settingsModalIsOpen}
+					onRequestClose={() => toggleModal('settings')}
+					className={styles.modal}
+				>
+					Settings
+				</Modal>
+			</div>
 		</>
 	)
 }
