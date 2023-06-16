@@ -151,6 +151,7 @@ const SellRoom = function SellRoom() {
 		initialize()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+
 	return (
 		<SellRoomView
 			canvasRef={canvasRef}
@@ -160,6 +161,28 @@ const SellRoom = function SellRoom() {
 			handleMicMute={handleMicMute}
 			handleCameraMute={handleCameraMute}
 			handleStream={handleStream}
+			videoDevices={videoDevices}
+			audioDevices={audioDevices}
+			activeVideoDeviceId={
+				activeVideoDevice.current
+					? activeVideoDevice.current.deviceId
+					: ''
+			}
+			activeAudioDeviceId={
+				activeAudioDevice.current
+					? activeAudioDevice.current.deviceId
+					: ''
+			}
+			handleVideoDeviceSelect={(deviceId, clientUpdateRequired) => {
+				const device = videoDevices.find((d) => d.deviceId === deviceId)
+				activeVideoDevice.current = device
+				if (!clientUpdateRequired) renderActiveVideoDevice()
+			}}
+			handleAudioDeviceSelect={(deviceId, clientUpdateRequired) => {
+				const device = audioDevices.find((d) => d.deviceId === deviceId)
+				activeAudioDevice.current = device
+				if (!clientUpdateRequired) renderActiveAudioDevice()
+			}}
 		/>
 	)
 }

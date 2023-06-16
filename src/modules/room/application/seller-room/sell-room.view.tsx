@@ -30,6 +30,12 @@ interface Props {
 	handleMicMute: () => void
 	handleCameraMute: () => void
 	handleStream: () => void
+	/*	videoDevices: MediaDeviceInfo[]
+	audioDevices: MediaDeviceInfo[]
+	activeVideoDeviceId: string
+	activeAudioDeviceId: string
+	handleVideoDeviceSelect: (deviceId: string, clientUpdateRequired: boolean) => void
+	handleAudioDeviceSelect: (deviceId: string, clientUpdateRequired: boolean) => void */
 }
 
 const SellRoomView = function SellRoomView({
