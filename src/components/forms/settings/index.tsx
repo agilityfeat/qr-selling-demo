@@ -28,8 +28,8 @@ const DeviceSelect = function DeviceSelect({
 	onChange,
 }: DeviceSelectProps) {
 	return (
-		<fieldset className={styles.deviceSelectField}>
-			<label className={styles.deviceSelectLabel} htmlFor={id}>
+		<fieldset className={styles.fieldset}>
+			<label className={styles.label} htmlFor={id}>
 				{name}
 			</label>
 			<select

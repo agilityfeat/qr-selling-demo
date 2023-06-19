@@ -38,112 +38,121 @@ const QRCodeForm = function QRCodeForm(): JSX.Element {
 
 	return (
 		<div className={styles.container}>
-			<h1 className={styles.title}>QR Code Form</h1>
-			<form className={styles.form} onSubmit={handleSubmit}>
-				<div className={styles.formGroup}>
-					<label htmlFor="text">
-						Text:
-						<input
-							className={styles.input}
-							type="text"
-							id="text"
-							name="text"
-							value={formData.text}
-							onChange={handleInputChange}
-							required
-						/>
-					</label>
+			<div className={styles.content}>
+				<div className={styles.title}>
+					<h2>QR Code Form</h2>
 				</div>
-				<div className={styles.formGroup}>
-					<label htmlFor="xAxis">
-						X-Axis:
-						<input
-							className={styles.input}
-							type="number"
-							id="xAxis"
-							name="xAxis"
-							value={formData.xAxis}
-							onChange={handleInputChange}
-							required
-						/>
-					</label>
+				<div className={styles.contentBody}>
+					<form className={styles.form} onSubmit={handleSubmit}>
+						<fieldset className={styles.fieldset}>
+							<label htmlFor="text" className={styles.label}>
+								Text:
+								<input
+									className={styles.input}
+									type="text"
+									id="text"
+									name="text"
+									value={formData.text}
+									onChange={handleInputChange}
+									required
+								/>
+							</label>
+						</fieldset>
+						<fieldset className={styles.fieldset}>
+							<label htmlFor="xAxis" className={styles.label}>
+								X-Axis:
+								<input
+									className={styles.input}
+									type="number"
+									id="xAxis"
+									name="xAxis"
+									value={formData.xAxis}
+									onChange={handleInputChange}
+									required
+								/>
+							</label>
+						</fieldset>
+						<fieldset className={styles.fieldset}>
+							<label htmlFor="yAxis" className={styles.label}>
+								Y-Axis:
+								<input
+									className={styles.input}
+									type="number"
+									id="yAxis"
+									name="yAxis"
+									value={formData.yAxis}
+									onChange={handleInputChange}
+									required
+								/>
+							</label>
+						</fieldset>
+						<fieldset className={styles.fieldset}>
+							<label htmlFor="width" className={styles.label}>
+								Width:
+								<input
+									className={styles.input}
+									type="number"
+									id="width"
+									name="width"
+									value={formData.width}
+									onChange={handleInputChange}
+									required
+								/>
+							</label>
+						</fieldset>
+						<fieldset className={styles.fieldset}>
+							<label htmlFor="height" className={styles.label}>
+								Height:
+								<input
+									className={styles.input}
+									type="number"
+									id="height"
+									name="height"
+									value={formData.height}
+									onChange={handleInputChange}
+									required
+								/>
+							</label>
+						</fieldset>
+						<fieldset className={styles.fieldset}>
+							<label htmlFor="darkColor" className={styles.label}>
+								Dark Color:
+								<input
+									className={styles.inputColor}
+									type="color"
+									id="darkColor"
+									name="darkColor"
+									value={formData.darkColor}
+									onChange={handleInputChange}
+									required
+								/>
+							</label>
+						</fieldset>
+						<fieldset className={styles.fieldset}>
+							<label
+								htmlFor="lightColor"
+								className={styles.label}
+							>
+								Light Color:
+								<input
+									className={styles.inputColor}
+									type="color"
+									id="lightColor"
+									name="lightColor"
+									value={formData.lightColor}
+									onChange={handleInputChange}
+									required
+								/>
+							</label>
+						</fieldset>
+					</form>
 				</div>
-				<div className={styles.formGroup}>
-					<label htmlFor="yAxis">
-						Y-Axis:
-						<input
-							className={styles.input}
-							type="number"
-							id="yAxis"
-							name="yAxis"
-							value={formData.yAxis}
-							onChange={handleInputChange}
-							required
-						/>
-					</label>
-				</div>
-				<div className={styles.formGroup}>
-					<label htmlFor="width">
-						Width:
-						<input
-							className={styles.input}
-							type="number"
-							id="width"
-							name="width"
-							value={formData.width}
-							onChange={handleInputChange}
-							required
-						/>
-					</label>
-				</div>
-				<div className={styles.formGroup}>
-					<label htmlFor="height">
-						Height:
-						<input
-							className={styles.input}
-							type="number"
-							id="height"
-							name="height"
-							value={formData.height}
-							onChange={handleInputChange}
-							required
-						/>
-					</label>
-				</div>
-				<div className={styles.formGroup}>
-					<label htmlFor="darkColor">
-						Dark Color:
-						<input
-							className={styles.input}
-							type="color"
-							id="darkColor"
-							name="darkColor"
-							value={formData.darkColor}
-							onChange={handleInputChange}
-							required
-						/>
-					</label>
-				</div>
-				<div className={styles.formGroup}>
-					<label htmlFor="lightColor">
-						Light Color:
-						<input
-							className={styles.input}
-							type="color"
-							id="lightColor"
-							name="lightColor"
-							value={formData.lightColor}
-							onChange={handleInputChange}
-							required
-						/>
-					</label>
-				</div>
-				<div className={styles.formGroup}>
+				<footer className={styles.footer}>
 					<button className={styles.submitButton} type="submit">
 						Generate QR Code
 					</button>
-				</div>
-			</form>
+				</footer>
+			</div>
 		</div>
 	)
 }

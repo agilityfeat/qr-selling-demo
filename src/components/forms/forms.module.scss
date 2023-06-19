@@ -36,17 +36,28 @@
   width: 100%;
   align-items: flex-end;
   gap: 1.5rem;
-  padding: 0 2rem 2rem 2rem;
-}
-
-.formGroup {
-  display: grid;
-  gap: 0.5rem;
 }
 
 .input {
-  padding: 0.5rem;
+  display: flex;
+  width: 100%;
+  padding: 0.8rem 1.2rem;
   border: 1px solid #BD9479;
+  border-radius: 5px;
+  outline: none;
+  appearance: none;
+  resize: none;
+  -webkit-appearance: none;
+}
+
+.inputColor {
+  display: flex;
+  width: 100%;
+  border: 1px solid #BD9479;
+  border-radius: 5px;
+  outline: none;
+  resize: none;
+  -webkit-appearance: none;
 }
 
 .submitButton {
@@ -61,8 +72,7 @@
   display: flex;
   width: 100%;
   padding: 0.8rem 1.2rem;
-  border: 2px solid transparent;
-  color: 1px solid #BD9479;
+  border: 1px solid #BD9479;
   border-radius: 5px;
   outline: none;
   appearance: none;
@@ -76,14 +86,14 @@
   border: 2px solid var(--color--primary);
 }
 
-.deviceSelectField {
+.fieldset {
   width: 100%;
   margin: 0;
   padding: 0;
   border: none;
 }
 
-.deviceSelectLabel {
+.label {
   display: block;
 }
 
