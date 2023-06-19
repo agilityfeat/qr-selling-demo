@@ -20,6 +20,7 @@ import IconButton from '@/components/buttons/iconButton/iconButton'
 import QRCodeForm from '@/components/forms/qr'
 import PrimaryButton from '@/components/buttons/primary'
 import ControlButton from '@/components/buttons/controlButton/controlButton'
+import Settings from '@/components/forms/settings'
 import styles from './sell-room.module.scss'
 
 interface Props {
@@ -30,12 +31,12 @@ interface Props {
 	handleMicMute: () => void
 	handleCameraMute: () => void
 	handleStream: () => void
-	/*	videoDevices: MediaDeviceInfo[]
+	videoDevices: MediaDeviceInfo[]
 	audioDevices: MediaDeviceInfo[]
 	activeVideoDeviceId: string
 	activeAudioDeviceId: string
-	handleVideoDeviceSelect: (deviceId: string, clientUpdateRequired: boolean) => void
-	handleAudioDeviceSelect: (deviceId: string, clientUpdateRequired: boolean) => void */
+	handleVideoDeviceSelect: (deviceId: string) => void
+	handleAudioDeviceSelect: (deviceId: string) => void
 }
 
 const SellRoomView = function SellRoomView({
@@ -46,6 +47,12 @@ const SellRoomView = function SellRoomView({
 	handleMicMute,
 	handleCameraMute,
 	handleStream,
+	videoDevices,
+	audioDevices,
+	activeVideoDeviceId,
+	activeAudioDeviceId,
+	handleVideoDeviceSelect,
+	handleAudioDeviceSelect,
 }: Props) {
 	const [imgModalIsOpen, setImgModalIsOpen] = useState(false)
 	const [qrModalIsOpen, setQrModalIsOpen] = useState(false)
@@ -144,7 +151,15 @@ const SellRoomView = function SellRoomView({
 					onRequestClose={() => toggleModal('settings')}
 					className={styles.modal}
 				>
-					Settings
+					<Settings
+						videoDevices={videoDevices}
+						audioDevices={audioDevices}
+						activeVideoDeviceId={activeVideoDeviceId}
+						activeAudioDeviceId={activeAudioDeviceId}
+						handleVideoDeviceSelect={handleVideoDeviceSelect}
+						handleAudioDeviceSelect={handleAudioDeviceSelect}
+						handleCloseModal={() => toggleModal('settings')}
+					/>
 				</Modal>
 			</div>
 		</>

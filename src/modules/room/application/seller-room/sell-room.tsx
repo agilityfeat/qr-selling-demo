@@ -173,15 +173,13 @@ const SellRoom = function SellRoom() {
 					? activeAudioDevice.current.deviceId
 					: ''
 			}
-			handleVideoDeviceSelect={(deviceId, clientUpdateRequired) => {
+			handleVideoDeviceSelect={(deviceId) => {
 				const device = videoDevices.find((d) => d.deviceId === deviceId)
 				activeVideoDevice.current = device
-				if (!clientUpdateRequired) renderActiveVideoDevice()
 			}}
-			handleAudioDeviceSelect={(deviceId, clientUpdateRequired) => {
+			handleAudioDeviceSelect={(deviceId) => {
 				const device = audioDevices.find((d) => d.deviceId === deviceId)
 				activeAudioDevice.current = device
-				if (!clientUpdateRequired) renderActiveAudioDevice()
 			}}
 		/>
 	)

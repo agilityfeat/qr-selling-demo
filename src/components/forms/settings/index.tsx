@@ -7,20 +7,14 @@ interface Props {
 	audioDevices: MediaDeviceInfo[]
 	activeVideoDeviceId: string
 	activeAudioDeviceId: string
-	handleVideoDeviceSelect: (
-		deviceId: string,
-		clientUpdateRequired: boolean
-	) => void
-	handleAudioDeviceSelect: (
-		deviceId: string,
-		clientUpdateRequired: boolean
-	) => void
-	handleCloseModal: (modal: string) => void
+	handleVideoDeviceSelect: (deviceId: string) => void
+	handleAudioDeviceSelect: (deviceId: string) => void
+	handleCloseModal: () => void
 }
 
 interface DeviceSelectProps {
 	activeDeviceId: string
-	items: { deviceId: string; label: string }[]
+	items: MediaDeviceInfo[]
 	name: string
 	id: string
 	onChange: (e: any) => void
@@ -35,19 +29,20 @@ const DeviceSelect = function DeviceSelect({
 }: DeviceSelectProps) {
 	return (
 		<fieldset className={styles.deviceSelectField}>
-			<label
-				className={styles.deviceSelectLabel}
-				htmlFor={`${id}`}
-			>{`${name}`}</label>
+			<label className={styles.deviceSelectLabel} htmlFor={id}>
+				{name}
+			</label>
 			<select
+				className={styles.select}
 				onChange={onChange}
 				defaultValue={activeDeviceId}
-				id={`${id}`}
+				id={id}
 			>
-				{items.map((item, i) => ({
-					value: item.deviceId,
-					label: item.label,
-				}))}
+				{items.map((item) => (
+					<option key={item.deviceId} value={item.deviceId}>
+						{item.label}
+					</option>
+				))}
 			</select>
 		</fieldset>
 	)
@@ -121,7 +116,47 @@ const Settings = function Settings({
 							/>
 						</div>
 					</div>
+					<form
+						className={styles.form}
+						onSubmit={(e) => e.preventDefault()}
+					>
+						<DeviceSelect
+							items={videoDevices}
+							name="Webcam"
+							id="webcam-select"
+							onChange={(e) =>
+								setSelectedVideoDeviceId(e.target.value)
+							}
+							activeDeviceId={selectedVideoDeviceId}
+						/>
+						<DeviceSelect
+							items={audioDevices}
+							name="Mic"
+							id="mic-select"
+							onChange={(e) =>
+								setSelectedAudioDeviceId(e.target.value)
+							}
+							activeDeviceId={selectedAudioDeviceId}
+						/>
+					</form>
 				</div>
+				<footer className={styles.footer}>
+					<button
+						type="submit"
+						className={styles.submitButton}
+						onClick={() => {
+							if (selectedVideoDeviceId !== activeVideoDeviceId) {
+								handleVideoDeviceSelect(selectedVideoDeviceId)
+							}
+							if (selectedAudioDeviceId !== activeAudioDeviceId) {
+								handleAudioDeviceSelect(selectedAudioDeviceId)
+							}
+							handleCloseModal()
+						}}
+					>
+						Save
+					</button>
+				</footer>
 			</div>
 		</div>
 	)
