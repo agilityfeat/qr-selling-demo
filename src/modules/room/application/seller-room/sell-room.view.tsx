@@ -131,37 +131,35 @@ const SellRoomView = function SellRoomView({
 					<Chat messages={['Message 1', 'Message 2', 'Message 3']} />
 				</div>
 			</Main>
-			<div id="modals">
-				<Modal
-					isOpen={imgModalIsOpen}
-					onRequestClose={() => toggleModal('image')}
-					className={styles.modal}
-				>
-					<ImageForm />
-				</Modal>
-				<Modal
-					isOpen={qrModalIsOpen}
-					onRequestClose={() => toggleModal('qr')}
-					className={styles.modal}
-				>
-					<QRCodeForm />
-				</Modal>
-				<Modal
-					isOpen={settingsModalIsOpen}
-					onRequestClose={() => toggleModal('settings')}
-					className={styles.modal}
-				>
-					<Settings
-						videoDevices={videoDevices}
-						audioDevices={audioDevices}
-						activeVideoDeviceId={activeVideoDeviceId}
-						activeAudioDeviceId={activeAudioDeviceId}
-						handleVideoDeviceSelect={handleVideoDeviceSelect}
-						handleAudioDeviceSelect={handleAudioDeviceSelect}
-						handleCloseModal={() => toggleModal('settings')}
-					/>
-				</Modal>
-			</div>
+			<Modal
+				isOpen={imgModalIsOpen}
+				onRequestClose={() => toggleModal('image')}
+				className={styles.modal}
+			>
+				<ImageForm />
+			</Modal>
+			<Modal
+				isOpen={qrModalIsOpen}
+				onRequestClose={() => toggleModal('qr')}
+				className={styles.modal}
+			>
+				<QRCodeForm />
+			</Modal>
+			<Modal
+				isOpen={settingsModalIsOpen}
+				onRequestClose={() => toggleModal('settings')}
+				className={styles.modal}
+			>
+				<Settings
+					videoDevices={videoDevices}
+					audioDevices={audioDevices}
+					activeVideoDeviceId={activeVideoDeviceId}
+					activeAudioDeviceId={activeAudioDeviceId}
+					handleVideoDeviceSelect={handleVideoDeviceSelect}
+					handleAudioDeviceSelect={handleAudioDeviceSelect}
+					handleCloseModal={() => toggleModal('settings')}
+				/>
+			</Modal>
 		</>
 	)
 }
