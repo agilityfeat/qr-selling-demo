@@ -1,0 +1,20 @@
+.button {
+  border: 0.2rem solid transparent;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  font-weight: 500;
+  font-size: 1.6rem;
+  background: #f1f2f3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  border-radius: 10px;
+}
+
+.button:hover {
+  background-color: #BD9479;
+  color: #F8F7F4;
+}
