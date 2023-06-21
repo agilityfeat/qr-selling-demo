@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import useLayers, { Layer } from '@/components/stream/useLayers'
 import useMixer, { AudioDevice } from '@/components/stream/useMixer'
 import useStream from '@/components/stream/useStream'
+import useTransform from '@/components/stream/useTransform'
 import { ivsConfig } from '@/config/ivs'
 import SellRoomView from './sell-room.view'
 
@@ -22,6 +23,14 @@ const SellRoom = function SellRoom() {
 	const { addLayer, removeLayer } = useLayers([])
 	const { addMixerDevice, toggleMixerDeviceMute } = useMixer([])
 	const { isLive, toggleStream } = useStream()
+
+	const { cleanStream } = useTransform()
+	const selectedTransform = useRef<
+		(frame: VideoFrame, controller: any) => void
+	>(cleanStream())
+
+	const transformFn = (frame: VideoFrame, controller: any) =>
+		selectedTransform.current(frame, controller)
 
 	const getMediaDevices = async () => {
 		const devices = await navigator.mediaDevices.enumerateDevices()
@@ -46,7 +55,7 @@ const SellRoom = function SellRoom() {
 			type: 'VIDEO',
 		}
 
-		addLayer(layer, client.current)
+		addLayer(layer, client.current, transformFn)
 	}
 
 	const renderActiveAudioDevice = () => {
@@ -86,7 +95,7 @@ const SellRoom = function SellRoom() {
 		}
 
 		if (camMuted) {
-			await addLayer(layer, client.current)
+			await addLayer(layer, client.current, transformFn)
 			setCamMuted(false)
 		} else {
 			await removeLayer(layer, client.current)
@@ -180,6 +189,11 @@ const SellRoom = function SellRoom() {
 			handleAudioDeviceSelect={(deviceId) => {
 				const device = audioDevices.find((d) => d.deviceId === deviceId)
 				activeAudioDevice.current = device
+			}}
+			handleTransformSelect={(
+				transform: (frame: VideoFrame, controller: any) => void
+			) => {
+				selectedTransform.current = transform
 			}}
 		/>
 	)
