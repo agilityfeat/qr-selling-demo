@@ -21,6 +21,10 @@ import QRCodeForm from '@/components/forms/qr'
 import PrimaryButton from '@/components/buttons/primary'
 import ControlButton from '@/components/buttons/controlButton/controlButton'
 import Settings from '@/components/forms/settings'
+import useTransform, {
+	ShowImageParams,
+	ShowQrImageParams,
+} from '@/components/stream/useTransform'
 import styles from './sell-room.module.scss'
 
 interface Props {
@@ -37,6 +41,9 @@ interface Props {
 	activeAudioDeviceId: string
 	handleVideoDeviceSelect: (deviceId: string) => void
 	handleAudioDeviceSelect: (deviceId: string) => void
+	handleTransformSelect: (
+		transform: (frame: VideoFrame, controller: any) => void
+	) => void
 }
 
 const SellRoomView = function SellRoomView({
@@ -53,10 +60,12 @@ const SellRoomView = function SellRoomView({
 	activeAudioDeviceId,
 	handleVideoDeviceSelect,
 	handleAudioDeviceSelect,
+	handleTransformSelect,
 }: Props) {
 	const [imgModalIsOpen, setImgModalIsOpen] = useState(false)
 	const [qrModalIsOpen, setQrModalIsOpen] = useState(false)
 	const [settingsModalIsOpen, setSettingsModalIsOpen] = useState(false)
+	const { showImage, showQr } = useTransform()
 
 	const toggleModal = function toggleModal(m: string) {
 		switch (m) {
@@ -136,14 +145,22 @@ const SellRoomView = function SellRoomView({
 				onRequestClose={() => toggleModal('image')}
 				className={styles.modal}
 			>
-				<ImageForm />
+				<ImageForm
+					handleSave={(options: ShowImageParams) =>
+						handleTransformSelect(showImage(options))
+					}
+				/>
 			</Modal>
 			<Modal
 				isOpen={qrModalIsOpen}
 				onRequestClose={() => toggleModal('qr')}
 				className={styles.modal}
 			>
-				<QRCodeForm />
+				<QRCodeForm
+					handleSave={(options: ShowQrImageParams) =>
+						handleTransformSelect(showQr(options))
+					}
+				/>
 			</Modal>
 			<Modal
 				isOpen={settingsModalIsOpen}

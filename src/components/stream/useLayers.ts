@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import useTransform from './useTransform'
 
 export interface Layer {
 	name: string
@@ -14,6 +15,7 @@ export interface Layer {
 
 const useLayers = (initialLayers: Layer[]) => {
 	const [layers, setLayers] = useState(initialLayers)
+	const { createProcessedTrack } = useTransform()
 
 	const removeLayer = async (layer: Layer, client: any) => {
 		if (!layer) return
@@ -44,7 +46,11 @@ const useLayers = (initialLayers: Layer[]) => {
 		}
 	}
 
-	const addVideoLayer = async (layer: Layer, client: any) => {
+	const addVideoLayer = async (
+		layer: Layer,
+		client: any,
+		selectedTransform: (frame: VideoFrame, controller: any) => void
+	) => {
 		try {
 			if (layer.enabled) {
 				const { name, device, ...layerProps } = layer
@@ -60,7 +66,18 @@ const useLayers = (initialLayers: Layer[]) => {
 					audio: false,
 				})
 
-				await client.addVideoInputDevice(cameraStream, name, layerProps)
+				const pTrack = createProcessedTrack({
+					track: cameraStream.getVideoTracks()[0],
+					transform: (frame, controller) =>
+						selectedTransform(frame, controller),
+				})
+
+				const newCameraStream = new MediaStream([pTrack])
+				await client.addVideoInputDevice(
+					newCameraStream,
+					name,
+					layerProps
+				)
 			}
 			setLayers((prevState) => [...prevState, layer])
 		} catch (err: any) {
@@ -68,11 +85,15 @@ const useLayers = (initialLayers: Layer[]) => {
 		}
 	}
 
-	const addLayer = async (layer: Layer, client: any) => {
+	const addLayer = async (
+		layer: Layer,
+		client: any,
+		selectedTransform: (frame: VideoFrame, controller: any) => void
+	) => {
 		try {
 			switch (layer.type) {
 				case 'VIDEO':
-					await addVideoLayer(layer, client)
+					await addVideoLayer(layer, client, selectedTransform)
 					break
 				default:
 					break

@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react'
+import { ShowImageParams } from '@/components/stream/useTransform'
 import styles from '../forms.module.scss'
 
 interface FormData {
@@ -9,7 +10,11 @@ interface FormData {
 	height: number
 }
 
-const ImageForm = function ImageForm(): JSX.Element {
+interface Props {
+	handleSave: (options: ShowImageParams) => void
+}
+
+const ImageForm = function ImageForm({ handleSave }: Props): JSX.Element {
 	const [formData, setFormData] = useState<FormData>({
 		image: null,
 		xAxis: 0,
@@ -37,7 +42,13 @@ const ImageForm = function ImageForm(): JSX.Element {
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		// Perform form submission logic here
-		console.log(formData)
+		handleSave({
+			image: formData.image as File,
+			imgHeight: formData.height,
+			imgWidth: formData.width,
+			imgPositionX: formData.xAxis,
+			imgPositionY: formData.yAxis,
+		})
 		// Reset form
 		setFormData({
 			image: null,

@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react'
+import { ShowQrImageParams } from '@/components/stream/useTransform'
 import styles from '../forms.module.scss'
 
 interface FormData {
@@ -11,7 +12,11 @@ interface FormData {
 	lightColor: string
 }
 
-const QRCodeForm = function QRCodeForm(): JSX.Element {
+interface Props {
+	handleSave: (options: ShowQrImageParams) => void
+}
+
+const QRCodeForm = function QRCodeForm({ handleSave }: Props): JSX.Element {
 	const [formData, setFormData] = useState<FormData>({
 		text: '',
 		xAxis: 0,
@@ -33,7 +38,24 @@ const QRCodeForm = function QRCodeForm(): JSX.Element {
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		// Perform form submission logic here
-		console.log(formData)
+		handleSave({
+			text: formData.text,
+			colorDark: formData.darkColor,
+			colorLight: formData.lightColor,
+			positionX: formData.xAxis,
+			positionY: formData.yAxis,
+			qrHeight: formData.height,
+			qrWidth: formData.width,
+		})
+		setFormData({
+			text: '',
+			xAxis: 0,
+			yAxis: 0,
+			width: 128,
+			height: 128,
+			darkColor: '#000000',
+			lightColor: '#FFFFFF',
+		})
 	}
 
 	return (
