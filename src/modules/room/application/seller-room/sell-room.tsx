@@ -29,6 +29,9 @@ const SellRoom = function SellRoom() {
 		(frame: VideoFrame, controller: any) => void
 	>(cleanStream())
 
+	const transformFn = (frame: VideoFrame, controller: any) =>
+		selectedTransform.current(frame, controller)
+
 	const getMediaDevices = async () => {
 		const devices = await navigator.mediaDevices.enumerateDevices()
 		const vDevices = devices.filter((d) => d.kind === 'videoinput')
@@ -52,7 +55,7 @@ const SellRoom = function SellRoom() {
 			type: 'VIDEO',
 		}
 
-		addLayer(layer, client.current, selectedTransform.current)
+		addLayer(layer, client.current, transformFn)
 	}
 
 	const renderActiveAudioDevice = () => {
@@ -92,7 +95,7 @@ const SellRoom = function SellRoom() {
 		}
 
 		if (camMuted) {
-			await addLayer(layer, client.current, selectedTransform.current)
+			await addLayer(layer, client.current, transformFn)
 			setCamMuted(false)
 		} else {
 			await removeLayer(layer, client.current)

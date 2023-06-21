@@ -49,7 +49,7 @@ const useLayers = (initialLayers: Layer[]) => {
 	const addVideoLayer = async (
 		layer: Layer,
 		client: any,
-		selectedTransform: (frame: VideoFrame, controller: any) => void
+		transform: (frame: VideoFrame, controller: any) => void
 	) => {
 		try {
 			if (layer.enabled) {
@@ -68,8 +68,7 @@ const useLayers = (initialLayers: Layer[]) => {
 
 				const pTrack = createProcessedTrack({
 					track: cameraStream.getVideoTracks()[0],
-					transform: (frame, controller) =>
-						selectedTransform(frame, controller),
+					transform,
 				})
 
 				const newCameraStream = new MediaStream([pTrack])

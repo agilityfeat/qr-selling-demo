@@ -53,10 +53,10 @@ const useTransform = () => {
 
 	const showImage = function showImage({
 		image,
-		imgPositionX = 10,
-		imgPositionY = 10,
-		imgWidth = 450,
-		imgHeight = 320,
+		imgPositionX,
+		imgPositionY,
+		imgWidth,
+		imgHeight,
 	}: ShowImageParams): (frame: VideoFrame, controller: any) => void {
 		const canvas = new OffscreenCanvas(1, 1)
 		const ctx = canvas.getContext('2d')
@@ -91,12 +91,12 @@ const useTransform = () => {
 
 	const showQr = function showQr({
 		text,
-		qrWidth = 256,
-		qrHeight = 256,
-		colorDark = '#000000',
-		colorLight = '#FFFFFF',
-		positionX = 10,
-		positionY = 10,
+		qrWidth,
+		qrHeight,
+		colorDark,
+		colorLight,
+		positionX,
+		positionY,
 	}: ShowQrImageParams): (frame: VideoFrame, controller: any) => void {
 		const canvas = new OffscreenCanvas(1, 2)
 		const ctx = canvas.getContext('2d')

@@ -65,7 +65,7 @@ const SellRoomView = function SellRoomView({
 	const [imgModalIsOpen, setImgModalIsOpen] = useState(false)
 	const [qrModalIsOpen, setQrModalIsOpen] = useState(false)
 	const [settingsModalIsOpen, setSettingsModalIsOpen] = useState(false)
-	const { showImage, showQr } = useTransform()
+	const { showImage, showQr, cleanStream } = useTransform()
 
 	const toggleModal = function toggleModal(m: string) {
 		switch (m) {
@@ -135,7 +135,10 @@ const SellRoomView = function SellRoomView({
 							onClick={() => toggleModal('qr')}
 							icon={<FaQrcode />}
 						/>
-						<IconButton icon={<FaBroom />} />
+						<IconButton
+							onClick={() => handleTransformSelect(cleanStream())}
+							icon={<FaBroom />}
+						/>
 					</div>
 					<Chat messages={['Message 1', 'Message 2', 'Message 3']} />
 				</div>
@@ -146,9 +149,10 @@ const SellRoomView = function SellRoomView({
 				className={styles.modal}
 			>
 				<ImageForm
-					handleSave={(options: ShowImageParams) =>
+					handleOnSave={(options: ShowImageParams) =>
 						handleTransformSelect(showImage(options))
 					}
+					handleOnClose={() => toggleModal('image')}
 				/>
 			</Modal>
 			<Modal
@@ -157,9 +161,10 @@ const SellRoomView = function SellRoomView({
 				className={styles.modal}
 			>
 				<QRCodeForm
-					handleSave={(options: ShowQrImageParams) =>
+					handleOnSave={(options: ShowQrImageParams) =>
 						handleTransformSelect(showQr(options))
 					}
+					handleOnClose={() => toggleModal('qr')}
 				/>
 			</Modal>
 			<Modal

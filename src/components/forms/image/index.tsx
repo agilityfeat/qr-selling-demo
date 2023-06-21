@@ -11,23 +11,27 @@ interface FormData {
 }
 
 interface Props {
-	handleSave: (options: ShowImageParams) => void
+	handleOnSave: (options: ShowImageParams) => void
+	handleOnClose: () => void
 }
 
-const ImageForm = function ImageForm({ handleSave }: Props): JSX.Element {
+const ImageForm = function ImageForm({
+	handleOnSave,
+	handleOnClose,
+}: Props): JSX.Element {
 	const [formData, setFormData] = useState<FormData>({
 		image: null,
 		xAxis: 0,
 		yAxis: 0,
-		width: 0,
-		height: 0,
+		width: 240,
+		height: 320,
 	})
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target
 		setFormData((prevData) => ({
 			...prevData,
-			[name]: parseInt(value, 10),
+			[name]: value,
 		}))
 	}
 
@@ -42,21 +46,14 @@ const ImageForm = function ImageForm({ handleSave }: Props): JSX.Element {
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		// Perform form submission logic here
-		handleSave({
+		handleOnSave({
 			image: formData.image as File,
 			imgHeight: formData.height,
 			imgWidth: formData.width,
 			imgPositionX: formData.xAxis,
 			imgPositionY: formData.yAxis,
 		})
-		// Reset form
-		setFormData({
-			image: null,
-			xAxis: 0,
-			yAxis: 0,
-			width: 0,
-			height: 0,
-		})
+		handleOnClose()
 	}
 
 	return (
@@ -65,80 +62,89 @@ const ImageForm = function ImageForm({ handleSave }: Props): JSX.Element {
 				<div className={styles.title}>
 					<h2>Add Image</h2>
 				</div>
-				<div className={styles.contentBody}>
-					<form className={styles.form} onSubmit={handleSubmit}>
-						<fieldset className={styles.fieldset}>
-							<label className={styles.label} htmlFor="image">
-								Image:
-								<input
-									className={styles.input}
-									type="file"
-									id="image"
-									accept="image/*"
-									onChange={handleImageChange}
-									required
-								/>
-							</label>
-						</fieldset>
-						<fieldset className={styles.fieldset}>
-							<label htmlFor="xAxis" className={styles.label}>
-								X-Axis:
-								<input
-									className={styles.input}
-									type="number"
-									id="xAxis"
-									value={formData.xAxis}
-									onChange={handleInputChange}
-									required
-								/>
-							</label>
-						</fieldset>
-						<fieldset className={styles.fieldset}>
-							<label htmlFor="yAxis" className={styles.label}>
-								Y-Axis:
-								<input
-									className={styles.input}
-									type="number"
-									id="yAxis"
-									value={formData.yAxis}
-									onChange={handleInputChange}
-									required
-								/>
-							</label>
-						</fieldset>
-						<fieldset className={styles.fieldset}>
-							<label htmlFor="width" className={styles.label}>
-								Width:
-								<input
-									className={styles.input}
-									type="number"
-									id="width"
-									value={formData.width}
-									onChange={handleInputChange}
-									required
-								/>
-							</label>
-						</fieldset>
-						<fieldset className={styles.fieldset}>
-							<label htmlFor="height" className={styles.label}>
-								Height:
-								<input
-									className={styles.input}
-									type="number"
-									id="height"
-									value={formData.height}
-									onChange={handleInputChange}
-									required
-								/>
-							</label>
-						</fieldset>
-					</form>
-				</div>
-				<footer className={styles.footer}>
-					<button type="submit" className={styles.submitButton}>
-						Submit
-					</button>
-				</footer>
+				<form onSubmit={handleSubmit}>
+					<div className={styles.contentBody}>
+						<div className={styles.form}>
+							<fieldset className={styles.fieldset}>
+								<label className={styles.label} htmlFor="image">
+									Image:
+									<input
+										className={styles.input}
+										type="file"
+										id="image"
+										accept="image/*"
+										onChange={handleImageChange}
+										required
+									/>
+								</label>
+							</fieldset>
+							<fieldset className={styles.fieldset}>
+								<label htmlFor="xAxis" className={styles.label}>
+									X-Axis:
+									<input
+										className={styles.input}
+										type="number"
+										id="xAxis"
+										name="xAxis"
+										value={formData.xAxis}
+										onChange={handleInputChange}
+										required
+									/>
+								</label>
+							</fieldset>
+							<fieldset className={styles.fieldset}>
+								<label htmlFor="yAxis" className={styles.label}>
+									Y-Axis:
+									<input
+										className={styles.input}
+										type="number"
+										id="yAxis"
+										name="yAxis"
+										value={formData.yAxis}
+										onChange={handleInputChange}
+										required
+									/>
+								</label>
+							</fieldset>
+							<fieldset className={styles.fieldset}>
+								<label htmlFor="width" className={styles.label}>
+									Width:
+									<input
+										className={styles.input}
+										type="number"
+										id="width"
+										name="width"
+										value={formData.width}
+										onChange={handleInputChange}
+										required
+									/>
+								</label>
+							</fieldset>
+							<fieldset className={styles.fieldset}>
+								<label
+									htmlFor="height"
+									className={styles.label}
+								>
+									Height:
+									<input
+										className={styles.input}
+										type="number"
+										id="height"
+										name="height"
+										value={formData.height}
+										onChange={handleInputChange}
+										required
+									/>
+								</label>
+							</fieldset>
+						</div>
+					</div>
+					<footer className={styles.footer}>
+						<button type="submit" className={styles.submitButton}>
+							Submit
+						</button>
+					</footer>
+				</form>
 			</div>
 		</div>
 	)
