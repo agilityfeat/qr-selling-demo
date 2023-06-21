@@ -25,8 +25,9 @@ const SellRoom = function SellRoom() {
 	const { isLive, toggleStream } = useStream()
 
 	const { cleanStream } = useTransform()
-	const selectedTransform =
-		useRef<(frame: VideoFrame, controller: any) => void>(cleanStream)
+	const selectedTransform = useRef<
+		(frame: VideoFrame, controller: any) => void
+	>(cleanStream())
 
 	const getMediaDevices = async () => {
 		const devices = await navigator.mediaDevices.enumerateDevices()
