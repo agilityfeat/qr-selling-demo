@@ -118,9 +118,18 @@ const SellRoomView = function SellRoomView({
 								onClick={() => toggleModal('settings')}
 								icon={<FaEllipsisH />}
 							/>
-							<PrimaryButton onClick={handleStream}>
-								{isLive ? 'Stop Selling' : 'Start Selling'}
-							</PrimaryButton>
+							{isLive ? (
+								<PrimaryButton
+									onClick={handleStream}
+									style={{ background: 'red' }}
+								>
+									Stop Selling
+								</PrimaryButton>
+							) : (
+								<PrimaryButton onClick={handleStream}>
+									Start Selling
+								</PrimaryButton>
+							)}
 						</div>
 						<div className={styles.controlBarRight} />
 					</div>

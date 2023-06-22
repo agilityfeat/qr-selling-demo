@@ -4,6 +4,7 @@ import styles from './button.module.scss'
 interface Props {
 	children: string
 	onClick?: () => void
+	style?: React.CSSProperties
 }
 
 const PrimaryButton = function Button({ children, ...props }: Props) {
