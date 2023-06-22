@@ -62,7 +62,7 @@ const SellRoom = function SellRoom() {
 		const mixerDevice: AudioDevice = {
 			name: MIC_LAYER_NAME,
 			device: activeAudioDevice.current as MediaDeviceInfo,
-			enabled: micMuted || false,
+			enabled: !micMuted,
 		}
 
 		addMixerDevice(mixerDevice, client.current)
