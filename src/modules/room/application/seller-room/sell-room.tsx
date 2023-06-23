@@ -26,11 +26,17 @@ const SellRoom = function SellRoom() {
 
 	const { cleanStream } = useTransform()
 	const selectedTransform = useRef<
-		(frame: VideoFrame, controller: any) => void
+		(
+			frame: VideoFrame,
+			controller: TransformStreamDefaultController
+		) => void
 	>(cleanStream())
+	const abortController = useRef(new AbortController())
 
-	const transformFn = (frame: VideoFrame, controller: any) =>
-		selectedTransform.current(frame, controller)
+	const transformFn = (
+		frame: VideoFrame,
+		controller: TransformStreamDefaultController
+	) => selectedTransform.current(frame, controller)
 
 	const getMediaDevices = async () => {
 		const devices = await navigator.mediaDevices.enumerateDevices()
@@ -55,7 +61,12 @@ const SellRoom = function SellRoom() {
 			type: 'VIDEO',
 		}
 
-		addLayer(layer, client.current, transformFn)
+		addLayer(
+			layer,
+			client.current,
+			transformFn,
+			abortController.current.signal
+		)
 	}
 
 	const renderActiveAudioDevice = () => {
@@ -95,9 +106,16 @@ const SellRoom = function SellRoom() {
 		}
 
 		if (camMuted) {
-			await addLayer(layer, client.current, transformFn)
+			await addLayer(
+				layer,
+				client.current,
+				transformFn,
+				abortController.current.signal
+			)
 			setCamMuted(false)
 		} else {
+			abortController.current.abort()
+			abortController.current = new AbortController()
 			await removeLayer(layer, client.current)
 			setCamMuted(true)
 		}
@@ -191,7 +209,10 @@ const SellRoom = function SellRoom() {
 				activeAudioDevice.current = device
 			}}
 			handleTransformSelect={(
-				transform: (frame: VideoFrame, controller: any) => void
+				transform: (
+					frame: VideoFrame,
+					controller: TransformStreamDefaultController
+				) => void
 			) => {
 				selectedTransform.current = transform
 			}}

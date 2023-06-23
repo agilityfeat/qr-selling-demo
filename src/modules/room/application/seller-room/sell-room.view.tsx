@@ -42,7 +42,10 @@ interface Props {
 	handleVideoDeviceSelect: (deviceId: string) => void
 	handleAudioDeviceSelect: (deviceId: string) => void
 	handleTransformSelect: (
-		transform: (frame: VideoFrame, controller: any) => void
+		transform: (
+			frame: VideoFrame,
+			controller: TransformStreamDefaultController
+		) => void
 	) => void
 }
 

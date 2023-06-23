@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { VideoDevice } from 'amazon-ivs-web-broadcast'
 import useTransform from './useTransform'
 
 export interface Layer {
@@ -23,7 +24,7 @@ const useLayers = (initialLayers: Layer[]) => {
 			const { name } = layer
 			if (!name) return
 
-			let stream
+			let stream: VideoDevice
 			switch (layer.type) {
 				case 'VIDEO':
 					stream = client.getVideoInputDevice(name)
@@ -49,7 +50,11 @@ const useLayers = (initialLayers: Layer[]) => {
 	const addVideoLayer = async (
 		layer: Layer,
 		client: any,
-		transform: (frame: VideoFrame, controller: any) => void
+		transform: (
+			frame: VideoFrame,
+			controller: TransformStreamDefaultController
+		) => void,
+		signal: AbortSignal
 	) => {
 		try {
 			if (layer.enabled) {
@@ -69,6 +74,7 @@ const useLayers = (initialLayers: Layer[]) => {
 				const pTrack = createProcessedTrack({
 					track: cameraStream.getVideoTracks()[0],
 					transform,
+					signal,
 				})
 
 				const newCameraStream = new MediaStream([pTrack])
@@ -87,12 +93,21 @@ const useLayers = (initialLayers: Layer[]) => {
 	const addLayer = async (
 		layer: Layer,
 		client: any,
-		selectedTransform: (frame: VideoFrame, controller: any) => void
+		selectedTransform: (
+			frame: VideoFrame,
+			controller: TransformStreamDefaultController
+		) => void,
+		signal: AbortSignal
 	) => {
 		try {
 			switch (layer.type) {
 				case 'VIDEO':
-					await addVideoLayer(layer, client, selectedTransform)
+					await addVideoLayer(
+						layer,
+						client,
+						selectedTransform,
+						signal
+					)
 					break
 				default:
 					break

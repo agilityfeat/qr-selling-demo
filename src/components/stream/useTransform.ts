@@ -2,7 +2,11 @@ import QRCode from 'qrcode'
 
 interface ProcessedTrackParams {
 	track: MediaStreamTrack
-	transform: (frame: VideoFrame, controller: any) => void
+	transform: (
+		frame: VideoFrame,
+		controller: TransformStreamDefaultController
+	) => void
+	signal: AbortSignal
 }
 
 export interface ShowImageParams {
@@ -27,6 +31,7 @@ const useTransform = () => {
 	const createProcessedTrack = function createProcessedTrack({
 		track,
 		transform,
+		signal,
 	}: ProcessedTrackParams) {
 		const trackProcessor = new MediaStreamTrackProcessor({ track })
 		const trackGenerator = new MediaStreamTrackGenerator({
@@ -35,16 +40,21 @@ const useTransform = () => {
 
 		const transformer = new TransformStream({ transform })
 
-		trackProcessor.readable
-			.pipeThrough(transformer)
+		const promise = trackProcessor.readable
+			.pipeThrough(transformer, { signal })
 			.pipeTo(trackGenerator.writable)
+
+		promise.catch((err: any) => {
+			trackProcessor.readable.cancel(err)
+			trackGenerator.writable.abort(err)
+		})
 
 		return trackGenerator
 	}
 
 	const cleanStream = function cleanStream(): (
 		frame: VideoFrame,
-		controller: any
+		controller: TransformStreamDefaultController
 	) => void {
 		return function transform(frame, controller) {
 			controller.enqueue(frame)
@@ -57,7 +67,10 @@ const useTransform = () => {
 		imgPositionY,
 		imgWidth,
 		imgHeight,
-	}: ShowImageParams): (frame: VideoFrame, controller: any) => void {
+	}: ShowImageParams): (
+		frame: VideoFrame,
+		controller: TransformStreamDefaultController
+	) => void {
 		const canvas = new OffscreenCanvas(1, 1)
 		const ctx = canvas.getContext('2d')
 		const img = new Image()
@@ -97,7 +110,10 @@ const useTransform = () => {
 		colorLight,
 		positionX,
 		positionY,
-	}: ShowQrImageParams): (frame: VideoFrame, controller: any) => void {
+	}: ShowQrImageParams): (
+		frame: VideoFrame,
+		controller: TransformStreamDefaultController
+	) => void {
 		const canvas = new OffscreenCanvas(1, 2)
 		const ctx = canvas.getContext('2d')
 		const qrCanvas = document.createElement('canvas')
