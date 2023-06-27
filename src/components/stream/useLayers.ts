@@ -64,10 +64,15 @@ const useLayers = (initialLayers: Layer[]) => {
 					await removeLayer(layer, client)
 				}
 
+				// Adding optional default true option if deviceId is empty.
+				// Sometimes you can't get deviceId (e.g: when it is the first time that you accept permissions)
+				// https://stackoverflow.com/a/65366422
 				const cameraStream = await navigator.mediaDevices.getUserMedia({
-					video: {
-						deviceId: { exact: device.deviceId },
-					},
+					video: device.deviceId
+						? {
+								deviceId: { exact: device.deviceId },
+						  }
+						: true,
 					audio: false,
 				})
 
