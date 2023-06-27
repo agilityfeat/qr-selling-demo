@@ -8,16 +8,21 @@ import styles from './buy-room.module.scss'
 
 interface Props {
 	videoRef: React.RefObject<HTMLVideoElement>
+	playerState: string
 }
 
-const BuyRoomView = function BuyRoomView({ videoRef }: Props) {
+const BuyRoomView = function BuyRoomView({ videoRef, playerState }: Props) {
 	return (
 		<>
 			<Header />
 			<Main>
 				<div className={styles.videos}>
 					<Videos>
-						<video id="localVideo" autoPlay ref={videoRef} />
+						{playerState === 'Ended' ? (
+							'This stream has ended'
+						) : (
+							<video id="localVideo" ref={videoRef} />
+						)}
 					</Videos>
 				</div>
 				<div className={styles.chat}>

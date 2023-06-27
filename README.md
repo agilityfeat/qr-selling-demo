@@ -1,4 +1,14 @@
-# WebRTC.ventures front end template
+# QR Selling Demo
+
+This is a demo NextJS application that shows a Live Sell application that uses Amazon IVS, and supports adding QR codes and images to the video in real-time.
+
+For demo purposes the application publish to one Amazon IVS Channel, which is set through public NextJS environment variables. This is NOT recommended for a production application, in such a case the logic should be move to a server side application.
+
+## Known Issues:
+
+-   Loading the player before starting the stream throws an error.
+
+# NextJS Template Info
 
 This is a template front end repository to use as base or inspiration for new development projects. It intents to follow clean architecture.
 
@@ -95,6 +105,7 @@ This architecture is based on the port / adapter pattern and the dependency inve
 _By documenting you on clean architecture (or hexagonal architecture). You will find different names for these parts. The names chosen here are personal, the goal being that they are understandable._
 
 ### Use case
+
 The uses cases define the actions of your users. The goal is not to use any framework or libraries in these elements (in order to keep a logic not coupled to these tools).
 
 On the front, they can be represented by function, by class written in JS or TS. With React, it is possible to use redux for this part.
@@ -102,21 +113,27 @@ On the front, they can be represented by function, by class written in JS or TS.
 In case redux is used, the actions are the use-cases, the state is one of the models, and the selectors are used to map.
 
 ### Primary port
+
 The primary port is used to establish a contract between the primary adapter and the use cases. For this, an interface can be created. In practice, the use case is also considered a primary port.
 
 ### Primary adapter
+
 Then, the implementation of these interfaces are used to dialogue with the domain: the first is what we call the primary adapters. Their goal is to trigger the execution of use cases. For example on the front, these adapters can be the React components that perform triggers an action (redux or not).
 
 ### Secondary port
+
 The secondary port is used to establish a contract between the secondary adapter and the use cases. For this, we usually create an interface. This interface is used directly in the use case.
 
 _Tips: you can use dependency injection for that, some state management libraries allow you to do that. For example with [redux-thunk](https://github.com/reduxjs/redux-thunk#injecting-a-custom-argument) and [redux-observable](https://redux-observable.js.org/docs/recipes/InjectingDependenciesIntoEpics.html) it is possible to pass "extraArguments" which will be directly available in the redux actions. In "vanilla", there is also [InversifyJS](https://github.com/inversify/InversifyJS)._
 
 ### Secondary adapter
+
 The second implementation of interfaces (ports) is called secondary adapters. They are called by the use cases. For example in front, these adapters can be the HTTP requests, the access to the data present in the local-storage, etc.
 
 ## Resources
-- [Hexagonal architecture by Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture/)
+
+-   [Hexagonal architecture by Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture/)
 
 ## Credit
+
 Application was originally based on: https://github.com/dimitridumont/clean-architecture-front-end
