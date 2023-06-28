@@ -2,7 +2,17 @@
 
 This is a demo NextJS application that shows a Live Sell application that uses Amazon IVS, and supports adding QR codes and images to the video in real-time.
 
-For demo purposes the application publish to one Amazon IVS Channel, which is set through public NextJS environment variables. This is NOT recommended for a production application, in such a case the logic should be move to a server side application.
+For demo purposes the application publish to one Amazon IVS Channel and Chat room, which are set through public NextJS environment variables. This is NOT recommended for a production application, instead such a logic should be move to a server side application.
+
+## How to Run the Application:
+
+1. Clone the repo.
+2. Install dependencies: `yarn install`.
+3. In the Amazon IVS console, create both a Channel and a Chat room. Note following values:
+    - Amazon IVS Channel Ingest Server, Stream Key and Playback URL
+    - Amazon IVS Chat Room Messaging Endpoint and two Chat Tokens (one for the seller and another one for buyer user)
+4. Add the values got from Amazon IVS console to the `.env.local` file.
+5. Run the application: `yarn dev`.
 
 ## Known Issues:
 
