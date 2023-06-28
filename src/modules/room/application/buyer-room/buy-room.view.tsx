@@ -4,6 +4,7 @@ import Header from '@/components/header'
 import Main from '@/components/main'
 import Videos from '@/components/videos'
 import Chat from '@/components/chat'
+import { ivsConfig } from '@/config/ivs'
 import styles from './buy-room.module.scss'
 
 interface Props {
@@ -26,7 +27,7 @@ const BuyRoomView = function BuyRoomView({ videoRef, playerState }: Props) {
 					</Videos>
 				</div>
 				<div className={styles.chat}>
-					<Chat messages={['Message 1', 'Message 2', 'Message 3']} />
+					<Chat chatToken={ivsConfig.chatTokenBuyer} />
 				</div>
 			</Main>
 		</>

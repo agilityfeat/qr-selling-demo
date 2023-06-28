@@ -25,6 +25,7 @@ import useTransform, {
 	ShowImageParams,
 	ShowQrImageParams,
 } from '@/components/stream/useTransform'
+import { ivsConfig } from '@/config/ivs'
 import styles from './sell-room.module.scss'
 
 interface Props {
@@ -152,7 +153,7 @@ const SellRoomView = function SellRoomView({
 							icon={<FaBroom />}
 						/>
 					</div>
-					<Chat messages={['Message 1', 'Message 2', 'Message 3']} />
+					<Chat chatToken={ivsConfig.chatTokenSeller} />
 				</div>
 			</Main>
 			<Modal
