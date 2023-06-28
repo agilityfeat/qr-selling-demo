@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import Script from 'next/script'
+import useChat from '@/components/chat/useChat'
 import { ivsConfig } from '@/config/ivs'
 import BuyRoomView from './buy-room.view'
 
@@ -8,6 +9,11 @@ const BuyRoom = function BuyRoom() {
 	const videoRef = useRef<HTMLVideoElement>(null)
 
 	const [playerState, setPlayerState] = useState<any>()
+
+	const { messages, sendMessage } = useChat(
+		ivsConfig.chatTokenBuyer,
+		ivsConfig.chatMessagingEndpoint
+	)
 
 	return (
 		<>
@@ -35,7 +41,12 @@ const BuyRoom = function BuyRoom() {
 					player.current.setVolume(0.5)
 				}}
 			/>
-			<BuyRoomView videoRef={videoRef} playerState={playerState} />
+			<BuyRoomView
+				videoRef={videoRef}
+				playerState={playerState}
+				chatMessages={messages}
+				sendChatMessages={sendMessage}
+			/>
 		</>
 	)
 }

@@ -25,6 +25,7 @@ import useTransform, {
 	ShowImageParams,
 	ShowQrImageParams,
 } from '@/components/stream/useTransform'
+import { Message } from '@/components/chat/useChat'
 import styles from './sell-room.module.scss'
 
 interface Props {
@@ -47,6 +48,8 @@ interface Props {
 			controller: TransformStreamDefaultController
 		) => void
 	) => void
+	chatMessages: Message[]
+	sendChatMessage: (text: string) => void
 }
 
 const SellRoomView = function SellRoomView({
@@ -64,6 +67,8 @@ const SellRoomView = function SellRoomView({
 	handleVideoDeviceSelect,
 	handleAudioDeviceSelect,
 	handleTransformSelect,
+	chatMessages,
+	sendChatMessage,
 }: Props) {
 	const [imgModalIsOpen, setImgModalIsOpen] = useState(false)
 	const [qrModalIsOpen, setQrModalIsOpen] = useState(false)
@@ -152,7 +157,10 @@ const SellRoomView = function SellRoomView({
 							icon={<FaBroom />}
 						/>
 					</div>
-					<Chat messages={['Message 1', 'Message 2', 'Message 3']} />
+					<Chat
+						messages={chatMessages}
+						sendMessage={sendChatMessage}
+					/>
 				</div>
 			</Main>
 			<Modal

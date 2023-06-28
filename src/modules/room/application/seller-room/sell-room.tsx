@@ -3,6 +3,7 @@ import useLayers, { Layer } from '@/components/stream/useLayers'
 import useMixer, { AudioDevice } from '@/components/stream/useMixer'
 import useStream from '@/components/stream/useStream'
 import useTransform from '@/components/stream/useTransform'
+import useChat from '@/components/chat/useChat'
 import { ivsConfig } from '@/config/ivs'
 import SellRoomView from './sell-room.view'
 
@@ -23,6 +24,10 @@ const SellRoom = function SellRoom() {
 	const { addLayer, removeLayer } = useLayers([])
 	const { addMixerDevice, toggleMixerDeviceMute } = useMixer([])
 	const { isLive, toggleStream } = useStream()
+	const { messages, sendMessage } = useChat(
+		ivsConfig.chatTokenSeller,
+		ivsConfig.chatMessagingEndpoint
+	)
 
 	const { cleanStream } = useTransform()
 	const selectedTransform = useRef<
@@ -216,6 +221,8 @@ const SellRoom = function SellRoom() {
 			) => {
 				selectedTransform.current = transform
 			}}
+			chatMessages={messages}
+			sendChatMessage={sendMessage}
 		/>
 	)
 }
