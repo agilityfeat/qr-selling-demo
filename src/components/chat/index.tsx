@@ -26,6 +26,7 @@ const Chat = function Chat({ messages, sendMessage }: Props) {
 						name="chatText"
 						type="text"
 						placeholder="Write a message..."
+						value={text}
 						onChange={(e: ChangeEvent<HTMLInputElement>) => {
 							const { value } = e.target
 							setText(value)
