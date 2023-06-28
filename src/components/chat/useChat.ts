@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react'
-import { ivsConfig } from '@/config/ivs'
 
 export interface Message {
 	text: string
@@ -7,10 +6,9 @@ export interface Message {
 
 const SEND_MESSAGE = 'SEND_MESSAGE'
 
-const useChat = (chatToken: string) => {
+const useChat = (chatToken: string, chatMessagingEndpoint: string) => {
 	const [messages, setMessages] = useState<Message[]>([])
 	const connection = useRef<WebSocket>()
-	const { chatMessagingEndpoint } = ivsConfig
 
 	useEffect(() => {
 		connection.current = new WebSocket(chatMessagingEndpoint, chatToken)

@@ -1,14 +1,14 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react'
-import useChat from './useChat'
 import styles from './chat.module.scss'
+import { Message } from './useChat'
 
 interface Props {
-	chatToken: string
+	messages: Message[]
+	sendMessage: (text: string) => void
 }
 
-const Chat = function Chat({ chatToken }: Props) {
+const Chat = function Chat({ messages, sendMessage }: Props) {
 	const [text, setText] = useState('')
-	const { messages, sendMessage } = useChat(chatToken)
 
 	const handleSend = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()

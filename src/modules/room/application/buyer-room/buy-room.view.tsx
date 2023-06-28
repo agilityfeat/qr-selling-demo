@@ -4,15 +4,22 @@ import Header from '@/components/header'
 import Main from '@/components/main'
 import Videos from '@/components/videos'
 import Chat from '@/components/chat'
-import { ivsConfig } from '@/config/ivs'
+import { Message } from '@/components/chat/useChat'
 import styles from './buy-room.module.scss'
 
 interface Props {
 	videoRef: React.RefObject<HTMLVideoElement>
 	playerState: string
+	chatMessages: Message[]
+	sendChatMessages: (text: string) => void
 }
 
-const BuyRoomView = function BuyRoomView({ videoRef, playerState }: Props) {
+const BuyRoomView = function BuyRoomView({
+	videoRef,
+	playerState,
+	chatMessages,
+	sendChatMessages,
+}: Props) {
 	return (
 		<>
 			<Header />
@@ -27,7 +34,10 @@ const BuyRoomView = function BuyRoomView({ videoRef, playerState }: Props) {
 					</Videos>
 				</div>
 				<div className={styles.chat}>
-					<Chat chatToken={ivsConfig.chatTokenBuyer} />
+					<Chat
+						messages={chatMessages}
+						sendMessage={sendChatMessages}
+					/>
 				</div>
 			</Main>
 		</>
