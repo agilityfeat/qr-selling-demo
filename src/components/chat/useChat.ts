@@ -6,27 +6,23 @@ export interface Message {
 
 const SEND_MESSAGE = 'SEND_MESSAGE'
 
-const useChat = (chatToken: string, chatMessagingEndpoint: string) => {
+const useChat = (chatMessagingEndpoint = 'http://localhost:8080') => {
 	const [messages, setMessages] = useState<Message[]>([])
 	const connection = useRef<WebSocket>()
 
 	useEffect(() => {
-		connection.current = new WebSocket(chatMessagingEndpoint, chatToken)
+		connection.current = new WebSocket(chatMessagingEndpoint)
 
 		connection.current.onmessage = (e) => {
-			const data = JSON.parse(e.data)
-			setMessages((prevState) => [...prevState, { text: data.Content }])
+			console.log('received message', e)
+			const { data } = e
+			setMessages((prevState) => [...prevState, { text: data }])
 		}
 	}, [])
 
 	const sendMessage = function send(text: string) {
-		const payload = {
-			Action: SEND_MESSAGE,
-			Content: text,
-		}
-
 		const con = connection.current as WebSocket
-		con.send(JSON.stringify(payload))
+		con.send(text)
 	}
 
 	return {

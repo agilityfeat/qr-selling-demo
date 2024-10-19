@@ -1,6 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Home from '@/components/home/home'
+import dynamic from 'next/dynamic'
+
+const Home = dynamic(() => import('@/components/home/home'), { ssr: false })
 
 const HomePage: NextPage = function home() {
 	return (
