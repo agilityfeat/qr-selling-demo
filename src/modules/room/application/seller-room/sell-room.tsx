@@ -5,12 +5,23 @@ import useStream from '@/components/stream/useStream'
 import useTransform from '@/components/stream/useTransform'
 import useChat from '@/components/chat/useChat'
 import { ivsConfig } from '@/config/ivs'
+import { agoraConfig } from '@/config/agora';
+import { 
+	useIsConnected,
+	useJoin, 
+	useLocalCameraTrack, 
+	useLocalMicrophoneTrack,
+	useRemoteUsers
+} from "agora-rtc-react";
 import SellRoomView from './sell-room.view'
 
 const CAM_LAYER_NAME = 'camera'
 const MIC_LAYER_NAME = 'mic'
 
 const SellRoom = function SellRoom() {
+	const [calling, setCalling] = useState(false);
+	const isLive = useIsConnected();
+
 	const client = useRef<any>()
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 	const activeVideoDevice = useRef<MediaDeviceInfo>()
@@ -23,7 +34,7 @@ const SellRoom = function SellRoom() {
 
 	const { addLayer, removeLayer } = useLayers([])
 	const { addMixerDevice, toggleMixerDeviceMute } = useMixer([])
-	const { isLive, toggleStream } = useStream()
+	// const { isLive, toggleStream } = useStream()
 	const { messages, sendMessage } = useChat(
 		ivsConfig.chatTokenSeller,
 		ivsConfig.chatMessagingEndpoint
@@ -85,54 +96,15 @@ const SellRoom = function SellRoom() {
 	}
 
 	const handleMicMute = async () => {
-		const mixerDevice: AudioDevice = {
-			name: MIC_LAYER_NAME,
-			device: activeAudioDevice.current as MediaDeviceInfo,
-			enabled: micMuted,
-		}
-
-		const enabled = toggleMixerDeviceMute(mixerDevice, client.current)
-		setMicMuted(enabled)
+		setMicMuted(prevState =>!prevState);
 	}
 
 	const handleCameraMute = async () => {
-		const canvas = client.current.getCanvasDimensions()
-
-		const layer: Layer = {
-			device: activeVideoDevice.current as MediaDeviceInfo,
-			name: CAM_LAYER_NAME,
-			index: 4,
-			enabled: camMuted,
-			x: 0,
-			y: 0,
-			width: canvas.width,
-			height: canvas.height,
-			type: 'VIDEO',
-		}
-
-		if (camMuted) {
-			await addLayer(
-				layer,
-				client.current,
-				transformFn,
-				abortController.current.signal
-			)
-			setCamMuted(false)
-		} else {
-			abortController.current.abort()
-			abortController.current = new AbortController()
-			await removeLayer(layer, client.current)
-			setCamMuted(true)
-		}
+		setCamMuted(prevState =>!prevState);
 	}
 
 	const handleStream = async () => {
-		toggleStream(
-			ivsConfig.ingestServer,
-			ivsConfig.streamKey,
-			client.current,
-			(err) => console.error(err)
-		)
+		setCalling(prevState => !prevState);
 	}
 
 	const initLayers = async () => {
@@ -180,9 +152,18 @@ const SellRoom = function SellRoom() {
 	}
 
 	useEffect(() => {
-		initialize()
+		// initialize()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+
+	useJoin({
+		appid: agoraConfig.agoraAppId,
+		channel: agoraConfig.agoraChannel,
+		token: agoraConfig.agoraToken
+	}, calling)
+
+	const { localMicrophoneTrack } = useLocalMicrophoneTrack(!micMuted);
+	const { localCameraTrack } = useLocalCameraTrack(!camMuted);
 
 	return (
 		<SellRoomView
@@ -193,6 +174,8 @@ const SellRoom = function SellRoom() {
 			handleMicMute={handleMicMute}
 			handleCameraMute={handleCameraMute}
 			handleStream={handleStream}
+			localMicrophoneTrack={localMicrophoneTrack}
+			localCameraTrack={localCameraTrack}
 			videoDevices={videoDevices}
 			audioDevices={audioDevices}
 			activeVideoDeviceId={

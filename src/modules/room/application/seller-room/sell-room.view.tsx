@@ -27,6 +27,7 @@ import useTransform, {
 } from '@/components/stream/useTransform'
 import { Message } from '@/components/chat/useChat'
 import styles from './sell-room.module.scss'
+import { ICameraVideoTrack, IMicrophoneAudioTrack, LocalUser } from 'agora-rtc-react'
 
 interface Props {
 	canvasRef: React.RefObject<HTMLCanvasElement>
@@ -36,6 +37,8 @@ interface Props {
 	handleMicMute: () => void
 	handleCameraMute: () => void
 	handleStream: () => void
+	localMicrophoneTrack: IMicrophoneAudioTrack | null
+	localCameraTrack: ICameraVideoTrack | null
 	videoDevices: MediaDeviceInfo[]
 	audioDevices: MediaDeviceInfo[]
 	activeVideoDeviceId: string
@@ -60,6 +63,8 @@ const SellRoomView = function SellRoomView({
 	handleMicMute,
 	handleCameraMute,
 	handleStream,
+	localMicrophoneTrack,
+	localCameraTrack,
 	videoDevices,
 	audioDevices,
 	activeVideoDeviceId,
@@ -99,11 +104,14 @@ const SellRoomView = function SellRoomView({
 			<Main>
 				<div className={styles.videos}>
 					<Videos>
-						<canvas
-							key="STREAM_PREVIEW_VIDEO"
-							id="cam-video-preview"
-							ref={canvasRef}
-						/>
+						<LocalUser
+							audioTrack={localMicrophoneTrack}
+							cameraOn={!camMuted}
+							micOn={!micMuted}
+							videoTrack={localCameraTrack}
+						>
+							You
+						</LocalUser>
 					</Videos>
 					<div className={styles.controlBar}>
 						<div className={styles.controlBarLeft} />
