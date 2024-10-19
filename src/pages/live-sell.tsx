@@ -1,6 +1,14 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import SellRoom from '@/modules/room/application/seller-room/sell-room'
+import dynamic from 'next/dynamic'
+
+const SellRoom = dynamic(
+	() => import('@/modules/room/application/seller-room/sell-room'),
+	{ ssr: false }
+)
+const Client = dynamic(() => import('@/modules/room/application/client'), {
+	ssr: false,
+})
 
 const LiveSell: NextPage = function LiveSell() {
 	return (
@@ -21,7 +29,9 @@ const LiveSell: NextPage = function LiveSell() {
 				/>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<SellRoom />
+			<Client>
+				<SellRoom />
+			</Client>
 		</>
 	)
 }

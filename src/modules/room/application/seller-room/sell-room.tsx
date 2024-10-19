@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useRef, useState } from 'react'
 import useLayers, { Layer } from '@/components/stream/useLayers'
 import useMixer, { AudioDevice } from '@/components/stream/useMixer'
@@ -5,22 +7,22 @@ import useStream from '@/components/stream/useStream'
 import useTransform from '@/components/stream/useTransform'
 import useChat from '@/components/chat/useChat'
 import { ivsConfig } from '@/config/ivs'
-import { agoraConfig } from '@/config/agora';
-import { 
+import { agoraConfig } from '@/config/agora'
+import {
 	useIsConnected,
-	useJoin, 
-	useLocalCameraTrack, 
+	useJoin,
+	useLocalCameraTrack,
 	useLocalMicrophoneTrack,
-	useRemoteUsers
-} from "agora-rtc-react";
+	useRemoteUsers,
+} from 'agora-rtc-react'
 import SellRoomView from './sell-room.view'
 
 const CAM_LAYER_NAME = 'camera'
 const MIC_LAYER_NAME = 'mic'
 
 const SellRoom = function SellRoom() {
-	const [calling, setCalling] = useState(false);
-	const isLive = useIsConnected();
+	const [calling, setCalling] = useState(false)
+	const isLive = useIsConnected()
 
 	const client = useRef<any>()
 	const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -35,10 +37,7 @@ const SellRoom = function SellRoom() {
 	const { addLayer, removeLayer } = useLayers([])
 	const { addMixerDevice, toggleMixerDeviceMute } = useMixer([])
 	// const { isLive, toggleStream } = useStream()
-	const { messages, sendMessage } = useChat(
-		ivsConfig.chatTokenSeller,
-		ivsConfig.chatMessagingEndpoint
-	)
+	const { messages, sendMessage } = useChat()
 
 	const { cleanStream } = useTransform()
 	const selectedTransform = useRef<
@@ -96,15 +95,15 @@ const SellRoom = function SellRoom() {
 	}
 
 	const handleMicMute = async () => {
-		setMicMuted(prevState =>!prevState);
+		setMicMuted((prevState) => !prevState)
 	}
 
 	const handleCameraMute = async () => {
-		setCamMuted(prevState =>!prevState);
+		setCamMuted((prevState) => !prevState)
 	}
 
 	const handleStream = async () => {
-		setCalling(prevState => !prevState);
+		setCalling((prevState) => !prevState)
 	}
 
 	const initLayers = async () => {
@@ -156,14 +155,17 @@ const SellRoom = function SellRoom() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	useJoin({
-		appid: agoraConfig.agoraAppId,
-		channel: agoraConfig.agoraChannel,
-		token: agoraConfig.agoraToken
-	}, calling)
+	useJoin(
+		{
+			appid: agoraConfig.agoraAppId,
+			channel: agoraConfig.agoraChannel,
+			token: agoraConfig.agoraToken,
+		},
+		calling
+	)
 
-	const { localMicrophoneTrack } = useLocalMicrophoneTrack(!micMuted);
-	const { localCameraTrack } = useLocalCameraTrack(!camMuted);
+	const { localMicrophoneTrack } = useLocalMicrophoneTrack(!micMuted)
+	const { localCameraTrack } = useLocalCameraTrack(!camMuted)
 
 	return (
 		<SellRoomView
