@@ -6,10 +6,12 @@ import Videos from '@/components/videos'
 import Chat from '@/components/chat'
 import { Message } from '@/components/chat/useChat'
 import styles from './buy-room.module.scss'
+import { IAgoraRTCRemoteUser, RemoteUser } from 'agora-rtc-react'
 
 interface Props {
 	videoRef: React.RefObject<HTMLVideoElement>
 	playerState: string
+	remoteUsers: IAgoraRTCRemoteUser[]
 	chatMessages: Message[]
 	sendChatMessages: (text: string) => void
 }
@@ -17,6 +19,7 @@ interface Props {
 const BuyRoomView = function BuyRoomView({
 	videoRef,
 	playerState,
+	remoteUsers,
 	chatMessages,
 	sendChatMessages,
 }: Props) {
@@ -26,11 +29,13 @@ const BuyRoomView = function BuyRoomView({
 			<Main>
 				<div className={styles.videos}>
 					<Videos>
-						{playerState === 'Ended' ? (
-							'This stream has ended'
-						) : (
-							<video id="localVideo" ref={videoRef} />
-						)}
+						{remoteUsers.map(user => (
+							<div className="user" key={user.uid}>
+								<RemoteUser user={user}>
+									<samp className="user-name">{user.uid}</samp>
+								</RemoteUser>
+							</div>
+						))}
 					</Videos>
 				</div>
 				<div className={styles.chat}>
